@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UX Impulse MTL 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+/* ── Reset ──────────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:     #f0ede6;
+  --ink:    #000000;
+  --cream:  #f0ede6;
+  --yellow: #ffaf13;
+  --green:  #0acf83;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════════════════ */
+#nav {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  z-index: 200;
+  padding: 20px 48px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  transition: background 0.4s ease;
+}
+
+#nav .nav-register {
+  justify-self: end;
+}
+
+#nav.scrolled {
+  background: rgba(240, 237, 230, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.nav-links {
+  display: flex;
+  gap: 56px;
+  list-style: none;
+}
+
+.nav-links a,
+.nav-register,
+.nav-home {
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--ink);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.nav-links a:hover,
+.nav-register:hover,
+.nav-home:hover { color: #df6c47; opacity: 1; }
+
+/* ══════════════════════════════════════════════════════════
+   HEADER — video sets the height, text overlays it
+══════════════════════════════════════════════════════════ */
+#header {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* video is NOT absolutely positioned — it flows naturally
+   so its full height is always visible, never cropped */
+.header-video-bg {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* pull video down by 8px so its bottom edge hides under
+     the next section — eliminates the hard colour edge */
+  margin-bottom: -8px;
+  outline: none;
+  border: none;
+  vertical-align: bottom;
+}
+
+/* remove default inline spacing gap below video */
+#header { font-size: 0; }
+
+/* ultra-subtle fade — only kills the hard edge, not visible as a gradient */
+#header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background: linear-gradient(to bottom, transparent, #f0ede6);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.header-scrim {
+  display: none;
+}
+
+/* text sits above video, centred over it */
+.header-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  text-align: center;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 48px;
+}
+
+.header-title {
+  font-size: clamp(72px, 12.5vw, 200px);
+  font-weight: 600;
+  letter-spacing: -0.08em;
+  line-height: 0.88;
+  color: var(--ink);
+  overflow: hidden;
+}
+
+/* each letter wraps in a span that clips the slide-up */
+.header-title .char {
+  display: inline-block;
+  transform: translateY(110%);
+  opacity: 0;
+  animation: charReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes charReveal {
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.header-sub {
+  font-size: clamp(18px, 2.4vw, 40px);
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: -0.04em;
+  margin-top: 36px;
+}
+
+.header-desc {
+  font-size: clamp(14px, 1.5vw, 26px);
+  font-weight: 400;
+  color: var(--ink);
+  margin-top: 18px;
+  line-height: 1.55;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SCHEDULE
+══════════════════════════════════════════════════════════ */
+#schedule {
+  background: var(--bg);
+  padding: 90px 0 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* curtain wipe-up */
+#schedule::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  transform: translateY(0);
+  transition: transform 1s cubic-bezier(0.76, 0, 0.24, 1);
+  z-index: 3;
+  pointer-events: none;
+}
+#schedule.entered::before { transform: translateY(-101%); }
+
+.schedule-title {
+  font-size: clamp(56px, 8.5vw, 128px);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  color: var(--ink);
+  padding: 0 48px 44px;
+}
+
+.schedule-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--ink);
+  padding: 0 48px;
+  height: 96px;
+  background: var(--bg);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateX(-28px);
+  transition:
+    opacity    0.5s ease,
+    transform  0.5s ease;
+  position: relative;
+  isolation: isolate;
+}
+.schedule-row:last-child { border-bottom: 1px solid var(--ink); }
+.schedule-row.row-visible { opacity: 1; transform: translateX(0); }
+
+/* slide-in fill */
+.schedule-row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.42s cubic-bezier(0.76, 0, 0.24, 1);
+  z-index: -1;
+}
+.schedule-row:not(.schedule-row--dark):hover::before { transform: scaleX(1); }
+
+/* first row — permanent dark */
+.schedule-row--dark { background: var(--ink) !important; }
+.schedule-row--dark .schedule-text { color: var(--cream) !important; }
+.schedule-row--dark .schedule-tag  {
+  background: var(--cream) !important;
+  color: var(--ink) !important;
+}
+
+/* hover: text colors follow the fill */
+.schedule-row:not(.schedule-row--dark):hover .schedule-text { color: var(--cream); }
+.schedule-row:not(.schedule-row--dark):hover .schedule-tag  {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.schedule-text {
+  font-size: clamp(14px, 2vw, 34px);
+  font-weight: 400;
+  letter-spacing: -0.065em;
+  color: var(--ink);
+  transition: color 0.32s;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.schedule-tag {
+  font-size: clamp(10px, 1vw, 20px);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  padding: 4px 22px;
+  border-radius: 40px;
+  background: var(--ink);
+  color: var(--cream);
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 20px;
+  transition: background 0.32s, color 0.32s;
+}
+
+/* ══════════════════════════════════════════════════════════
+   VENUE VIDEO — sticky parallax reveal (280vh scroll region)
+   Clip-path slit opens gradually: first ~25% of scroll is a
+   deliberate delay, then eases fully open over the rest.
+══════════════════════════════════════════════════════════ */
+#venue-scroll {
+  height: 280vh;
+  position: relative;
+}
+
+#venue-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.venue-mask {
+  position: absolute;
+  inset: 0;
+  will-change: clip-path;
+}
+
+.venue-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ══════════════════════════════════════════════════════════
+   VENUE LABEL
+══════════════════════════════════════════════════════════ */
+.venue-label {
+  position: absolute;
+  top: 10%;
+  left: 6%;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  pointer-events: none;
+}
+
+.venue-label.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.venue-label-title {
+  font-size: clamp(72px, 10vw, 128px);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 1;
+  color: #fff;
+}
+
+.venue-label-pill {
+  display: inline-block;
+  background: #fff;
+  color: #000;
+  font-size: clamp(16px, 2vw, 40px);
+  font-weight: 400;
+  letter-spacing: -0.05em;
+  padding: 10px 28px;
+  margin-top: 12px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SPEAKERS
+══════════════════════════════════════════════════════════ */
+#speakers {
+  background: var(--bg);
+  padding: 90px 48px 160px;
+  position: relative;
+  overflow: hidden;
+}
+
+#speakers::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  transform: translateY(0);
+  transition: transform 1s cubic-bezier(0.76, 0, 0.24, 1);
+  z-index: 3;
+  pointer-events: none;
+}
+#speakers.entered::before { transform: translateY(-101%); }
+
+.speakers-title {
+  font-size: clamp(56px, 8.5vw, 128px);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.speakers-sub {
+  font-size: clamp(14px, 1.8vw, 32px);
+  font-weight: 400;
+  letter-spacing: -0.06em;
+  color: var(--ink);
+  max-width: 840px;
+  line-height: 1.4;
+  margin-bottom: 52px;
+}
+
+/* ── Cards grid ─────────────────────────────────────────────
+   Figma: card w=994, photo w=394 (39.6%), fill w=600 (60.4%)
+   card h=496, gap between cards=118px
+   Section has padding so cards sit within it; grid overflows
+   right so card 2 peeks, hinting at the swipe.
+── */
+.speakers-grid {
+  display: flex;
+  gap: 0;
+  /* allow card 2 to peek past section right edge */
+  overflow: visible;
+  user-select: none;
+  will-change: transform;
+  transition: transform 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.speaker-card {
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  width: calc(58.5vw - 24px);
+  margin-right: 7vw;
+  overflow: hidden;
+  height: auto;
+  min-height: 320px;
+  max-height: 520px;
+}
+
+/* Photo: 39.6% of card width, greyscale */
+.card-photo-wrap {
+  flex: 0 0 39.6%;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-photo-wrap img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: grayscale(100%);
+}
+
+.card-info {
+  flex: 1;
+  padding: 36px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.card-name {
+  font-size: clamp(20px, 2vw, 38px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #1e1e1e;
+  line-height: 1.15;
+}
+
+.card-role {
+  font-size: clamp(12px, 1vw, 20px);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: #1e1e1e;
+  margin-top: 6px;
+}
+
+.card-bio {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 33px;
+  letter-spacing: -1px;
+  color: #000000;
+  margin-top: 48px;
+}
+
+/* ── Custom speaker cursor ──────────────────────────────── */
+#speaker-cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  background: #df6c47;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%) scale(0);
+  transition:
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity   0.2s ease;
+  opacity: 0;
+  will-change: transform;
+}
+
+#speaker-cursor.visible {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+#speaker-cursor svg {
+  width: 51px;
+  height: 51px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Mobile */
+@media (max-width: 820px) {
+  .speakers-grid { overflow: hidden; transition: none; }
+  .speaker-card {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    display: none;
+    margin-right: 0;
+    max-height: none;
+  }
+  .speaker-card.active-card { display: flex; }
+  .card-photo-wrap { flex: 0 0 auto; height: 280px; width: 100%; }
+  .card-info { padding: 24px 20px; }
+  .carousel-nav { display: flex; }
+  .swipe-hint { display: block; }
+}
+
+.carousel-nav {
+  display: none;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.carousel-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.2);
+  border: none; cursor: pointer; padding: 0;
+  transition: background 0.3s, transform 0.3s;
+}
+.carousel-dot.active { background: var(--ink); transform: scale(1.3); }
+
+.swipe-hint {
+  display: none;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(0,0,0,0.35);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════════════ */
+#footer {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 60vh 48px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+#footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  transform: translateY(0);
+  transition: transform 1s cubic-bezier(0.76, 0, 0.24, 1);
+  z-index: 3;
+  pointer-events: none;
+}
+#footer.entered::before { transform: translateY(-101%); }
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+  padding-bottom: 60px;
+}
+
+.footer-cta {
+  font-size: clamp(26px, 3.8vw, 58px);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  line-height: 1.15;
+  color: var(--cream);
+}
+
+.footer-form { display: flex; flex-direction: column; gap: 20px; }
+
+.footer-label {
+  font-size: 17px; font-weight: 400;
+  color: var(--cream); margin-bottom: 4px; display: block;
+}
+
+.footer-input {
+  width: 100%; background: transparent;
+  border: 1px solid var(--cream); border-radius: 13px;
+  padding: 18px 22px; font-size: 17px;
+  color: var(--cream); font-family: 'Inter', sans-serif;
+  outline: none; transition: border-color 0.2s;
+}
+.footer-input::placeholder { color: rgba(240,237,230,0.35); }
+.footer-input:focus { border-color: rgba(240,237,230,0.8); }
+
+.footer-submit {
+  align-self: flex-start;
+  background: var(--cream); color: var(--ink);
+  border: none; border-radius: 40px;
+  padding: 14px 36px; font-size: 17px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, opacity 0.2s;
+}
+.footer-submit:hover { background: #df6c47; color: #fff; opacity: 1; }
+
+.footer-wordmark {
+  font-size: clamp(44px, 10.5vw, 174px);
+  font-weight: 600;
+  letter-spacing: -0.082em;
+  line-height: 0.84;
+  color: var(--cream);
+  display: block;
+  white-space: nowrap;
+  padding-bottom: 36px;
+  margin-top: 28px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity   0.85s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-d1 { transition-delay: 0.12s; }
+.reveal-d2 { transition-delay: 0.26s; }
+.reveal-d3 { transition-delay: 0.42s; }
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #nav { padding: 14px 20px; }
+  .nav-links { gap: 20px; }
+  .nav-links a, .nav-register { font-size: 13px; }
+
+  #header { padding: 0 20px; }
+
+  #schedule { padding: 60px 0 0; }
+  .schedule-title { padding: 0 20px 32px; }
+  .schedule-row  { padding: 0 20px; height: 74px; }
+  .schedule-tag  { font-size: 10px; padding: 2px 12px; }
+
+  #speakers { padding: 60px 20px 120px; }
+
+  #footer { padding: 50vh 20px 0; }
+  .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ═══════ NAV ═══════ -->
+<nav id="nav">
+  <a href="#header" class="nav-home">Home</a>
+  <ul class="nav-links">
+    <li><a href="#schedule">Schedule</a></li>
+    <li><a href="#venue-scroll">Venue</a></li>
+    <li><a href="#speakers">Speakers</a></li>
+  </ul>
+  <a href="#footer" class="nav-register">Register</a>
+</nav>
+
+<!-- ═══════ HEADER — full-viewport video backdrop ═══════ -->
+<section id="header">
+  <video class="header-video-bg" autoplay muted playsinline id="headerVideo"
+    src="chosen-2.mp4">
+  </video>
+  <div class="header-scrim"></div>
+  <div class="header-text">
+    <h1 class="header-title" id="headerTitle">UX IMPULSE</h1>
+    <p class="header-sub reveal reveal-d1">When machines do more, what do humans do best?</p>
+    <p class="header-desc reveal reveal-d2">A full day of honest conversations, hands-on workshops, and thought-provoking discussions for designers navigating an AI-driven world.</p>
+  </div>
+</section>
+
+<!-- ═══════ SCHEDULE ═══════ -->
+<section id="schedule">
+  <h2 class="schedule-title reveal">Schedule</h2>
+
+  <div class="schedule-row">
+    <span class="schedule-text">08:30 – 09:00 &nbsp;|&nbsp; Doors Open &amp; Registration</span>
+    <span class="schedule-tag">REGISTRATION</span>
+  </div>
+  <div class="schedule-row">
+    <span class="schedule-text">09:00 – 10:00 &nbsp;|&nbsp; Why the Human Touch Matters More as AI Scales</span>
+    <span class="schedule-tag">KEYNOTE</span>
+  </div>
+  <div class="schedule-row">
+    <span class="schedule-text">09:45 – 10:15 &nbsp;|&nbsp; AI in Design: A Human Lens</span>
+    <span class="schedule-tag">SPEAKER</span>
+  </div>
+  <div class="schedule-row">
+    <span class="schedule-text">10:15 – 10:30 &nbsp;|&nbsp; Coffee Break</span>
+    <span class="schedule-tag">BREAK</span>
+  </div>
+  <div class="schedule-row">
+    <span class="schedule-text">10:30 – 11:10 &nbsp;|&nbsp; Research &amp; Insights · Accessibility · PM/Eng Collab</span>
+    <span class="schedule-tag">TALK</span>
+  </div>
+  <div class="schedule-row">
+    <span class="schedule-text">11:30 – 12:00 &nbsp;|&nbsp; Case Study: MTL Studio</span>
+    <span class="schedule-tag">SPEAKER</span>
+  </div>
+  <div class="schedule-row">
+    <span class="schedule-text">12:00 – 13:00 &nbsp;|&nbsp; Lunch &amp; Networking</span>
+    <span class="schedule-tag">LUNCH</span>
+  </div>
+  <div class="schedule-row">
+    <span class="schedule-text">13:15 – 14:15 &nbsp;|&nbsp; AI Research Synthesis</span>
+    <span class="schedule-tag">WORKSHOP</span>
+  </div>
+  <div class="schedule-row">
+    <span class="schedule-text">14:30 – 15:15 &nbsp;|&nbsp; Parts of Design AI Can't Replace</span>
+    <span class="schedule-tag">PANEL</span>
+  </div>
+  <div class="schedule-row">
+    <span class="schedule-text">15:15 – 15:30 &nbsp;|&nbsp; Break &amp; Snacks</span>
+    <span class="schedule-tag">BREAK</span>
+  </div>
+  <div class="schedule-row">
+    <span class="schedule-text">15:30 – 16:15 &nbsp;|&nbsp; Real Work, Real Feedback in the Room</span>
+    <span class="schedule-tag">CRITIQUE</span>
+  </div>
+</section>
+
+<!-- ═══════ VENUE VIDEO — slow sticky parallax reveal ═══════
+     280vh scroll region. Video is sticky; a clip-path slit
+     opens gradually. First 25% of scroll = deliberate pause
+     (only a hairline slit). Remaining 75% eases fully open.
+════════════════════════════════════════════════════════════ -->
+<div id="venue-scroll">
+  <div id="venue-sticky">
+    <div class="venue-mask" id="venueMask">
+      <video class="venue-video" autoplay muted loop playsinline
+        src="PVM-official.mp4">
+      </video>
+    </div>
+    <div class="venue-label" id="venueLabel">
+      <p class="venue-label-title">Venue</p>
+      <div class="venue-label-pill">SAP Montréal</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SPEAKERS ═══════ -->
+<section id="speakers">
+
+<!-- Custom directional cursor -->
+<div id="speaker-cursor">
+  <svg id="speaker-cursor-icon" viewBox="0 0 24 24">
+    <polyline points="9 5 16 12 9 19"></polyline>
+  </svg>
+</div>
+
+  <h2 class="speakers-title reveal">Speakers</h2>
+  <p class="speakers-sub reveal reveal-d1">Hear from industry leaders pushing the boundaries of design, innovation, and human-centered technology.</p>
+
+  <p class="swipe-hint">Swipe to see more →</p>
+
+  <div class="speakers-grid" id="speakersGrid">
+
+    <!-- Card 1: Cynthia — yellow panel -->
+    <div class="speaker-card active-card" data-index="0">
+      <div class="card-photo-wrap">
+        <img src="cynthia-speaker.jpeg.webp" alt="Cynthia Savard Saucier">
+      </div>
+      <div class="card-info" style="background:#ffaf13;">
+        <div class="card-header">
+          <p class="card-name">Cynthia Savard Saucier</p>
+          <p class="card-role">VP of Design, Shopify</p>
+        </div>
+        <p class="card-bio">Cynthia Savard Saucier is Vice President of Design at Shopify and co-author of Tragic Design, a book examining the real-world consequences of poor design decisions. With over 11 years leading design at Shopify, she specializes in UX strategy, ethical design, design leadership, and building high-performing design organizations that create meaningful, human-centered digital experiences.</p>
+      </div>
+    </div>
+
+    <!-- Card 2: Celine — green panel -->
+    <div class="speaker-card" data-index="1">
+      <div class="card-photo-wrap">
+        <img src="celine-speaker.png" alt="Celine Mornet">
+      </div>
+      <div class="card-info" style="background:#0acf83;">
+        <div class="card-header">
+          <p class="card-name">Celine Mornet</p>
+          <p class="card-role">Innovation Director, Moment Factory</p>
+        </div>
+        <p class="card-bio">With over 13 years at Moment Factory, Celine Mornet has grown from interactive developer to Innovation Director, leading initiatives in GenAI, Digital Twins, AR/XR, game engines, and immersive technologies. She drives innovation strategy, strategic partnerships, and cross-disciplinary collaboration while shaping the future of interactive experiences through emerging technologies.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="carousel-nav" id="carouselNav">
+    <button class="carousel-dot active" data-index="0"></button>
+    <button class="carousel-dot" data-index="1"></button>
+  </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer id="footer">
+  <div class="footer-grid">
+    <div>
+      <p class="footer-cta">We can't wait to see you there!<br>See you in <span id="countdown">#</span> days!</p>
+    </div>
+    <form class="footer-form" onsubmit="return false;">
+      <div>
+        <label class="footer-label">Name</label>
+        <input class="footer-input" type="text" placeholder="Your name">
+      </div>
+      <div>
+        <label class="footer-label">Email</label>
+        <input class="footer-input" type="email" placeholder="your@email.com">
+      </div>
+      <button class="footer-submit">Register</button>
+    </form>
+  </div>
+  <span class="footer-wordmark">UX IMPULSE 2026</span>
+</footer>
+
+<script>history.scrollRestoration = 'manual'; window.scrollTo(0, 0);</script>
+
+<script>
+const $  = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+// ── Header video: play once, hold last frame ───────────────
+const headerVideo = $('#headerVideo');
+if (headerVideo) {
+  headerVideo.loop = false;
+  headerVideo.addEventListener('ended', () => {
+    headerVideo.pause();
+  });
+  // Fallback: poll to catch edge cases where 'ended' doesn't fire
+  headerVideo.addEventListener('timeupdate', () => {
+    if (headerVideo.duration && headerVideo.currentTime >= headerVideo.duration - 0.05) {
+      headerVideo.pause();
+    }
+  });
+}
+(function () {
+  const event = new Date('2026-10-15');
+  const diff = Math.ceil((event - Date.now()) / 86400000);
+  const el = $('#countdown');
+  if (el && diff > 0) el.textContent = diff;
+})();
+
+// ── Nav background on scroll ───────────────────────────────
+const nav = $('#nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+// ── Scroll reveals ─────────────────────────────────────────
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+$$('.reveal').forEach(el => revealObs.observe(el));
+
+// ── Header title: per-character slide-up reveal ───────────
+(function () {
+  const title = $('#headerTitle');
+  if (!title) return;
+  const text = title.textContent;
+  title.textContent = '';
+  text.split('').forEach((ch, i) => {
+    const span = document.createElement('span');
+    span.className = 'char';
+    span.textContent = ch === ' ' ? ' ' : ch;
+    span.style.animationDelay = `${i * 0.045}s`;
+    title.appendChild(span);
+  });
+})();
+
+// immediately reveal above-fold items
+requestAnimationFrame(() => {
+  $$('#header .reveal').forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'), 80 + i * 140);
+  });
+});
+
+// ── Section curtain wipe ────────────────────────────────────
+const enterObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('entered');
+      enterObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.04 });
+['#schedule', '#speakers', '#footer'].forEach(sel => {
+  const el = $(sel);
+  if (el) enterObs.observe(el);
+});
+
+// ── Schedule rows stagger ───────────────────────────────────
+const rowObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.schedule-row').forEach((row, i) => {
+        setTimeout(() => row.classList.add('row-visible'), i * 55);
+      });
+      rowObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+const sched = $('#schedule');
+if (sched) rowObs.observe(sched);
+
+// ── Venue video sticky parallax reveal ─────────────────────
+// Technique: clip-path inset opens as user scrolls through
+// the 280vh wrapper. First 25% of scroll = deliberate pause
+// (barely a slit). Remaining 75% eases fully open.
+const venueScroll = $('#venue-scroll');
+const venueMask   = $('#venueMask');
+const venueLabel  = $('#venueLabel');
+
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+let venueFullyOpen = false;
+
+function updateVenue() {
+  if (!venueScroll || !venueMask) return;
+  if (venueFullyOpen) return;
+
+  const rect  = venueScroll.getBoundingClientRect();
+  const total = venueScroll.offsetHeight - window.innerHeight;
+  const raw   = clamp(-rect.top / total, 0, 1);
+
+  // 0→0.25 raw = very slow open (0% → 3% of full open)
+  // 0.25→1 raw = ease open (3% → 100%)
+  let t;
+  if (raw < 0.25) {
+    t = (raw / 0.25) * 0.03;
+  } else {
+    const sub = (raw - 0.25) / 0.75;
+    t = 0.03 + easeInOutCubic(sub) * 0.97;
+  }
+
+  // t=0: thin slit (top 49%, bottom 49%, sides 8%)
+  // t=1: fully open (0% inset everywhere)
+  const v = (1 - t);
+  const topBot = (v * 49).toFixed(2);
+  const sides  = (v * 8).toFixed(2);
+
+  venueMask.style.clipPath =
+    `inset(${topBot}% ${sides}% ${topBot}% ${sides}% round 0px)`;
+
+  if (t >= 0.999) {
+    venueMask.style.clipPath = 'inset(0% 0% 0% 0%)';
+    venueFullyOpen = true;
+  }
+
+  // Show label once video is mostly open (t > 0.75)
+  if (venueLabel) venueLabel.classList.toggle('visible', t > 0.75);
+}
+
+// ── RAF scroll loop ─────────────────────────────────────────
+let ticking = false;
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      updateVenue();
+      ticking = false;
+    });
+    ticking = true;
+  }
+}, { passive: true });
+
+updateVenue();
+
+// ── Speaker carousel (desktop: slide; mobile: show/hide) ───
+let currentCard = 0;
+const cards = $$('.speaker-card');
+const dots  = $$('.carousel-dot');
+const grid  = $('#speakersGrid');
+
+function goToCard(index) {
+  currentCard = Math.max(0, Math.min(cards.length - 1, index));
+  const isMobile = window.innerWidth <= 820;
+  if (isMobile) {
+    cards.forEach((c, i) => c.classList.toggle('active-card', i === currentCard));
+  } else {
+    // card width + its right margin (gap between cards)
+    const style = window.getComputedStyle(cards[0]);
+    const cardW = cards[0].offsetWidth + parseFloat(style.marginRight);
+    grid.style.transform = `translateX(-${currentCard * cardW}px)`;
+  }
+  dots.forEach((d, i) => d.classList.toggle('active', i === currentCard));
+}
+
+dots.forEach(d => d.addEventListener('click', () => goToCard(+d.dataset.index)));
+
+// touch swipe
+let swipeX = 0, swipeDelta = 0;
+grid.addEventListener('touchstart', e => { swipeX = e.touches[0].clientX; swipeDelta = 0; }, { passive: true });
+grid.addEventListener('touchmove',  e => { swipeDelta = e.touches[0].clientX - swipeX; },     { passive: true });
+grid.addEventListener('touchend',   () => { if (Math.abs(swipeDelta) > 50) goToCard(currentCard + (swipeDelta < 0 ? 1 : -1)); });
+
+// mouse drag (desktop)
+let dragging = false, dragStartX = 0, dragDeltaX = 0;
+grid.addEventListener('mousedown', e => { dragging = true; dragStartX = e.clientX; dragDeltaX = 0; });
+window.addEventListener('mousemove', e => { if (dragging) dragDeltaX = e.clientX - dragStartX; });
+window.addEventListener('mouseup', () => {
+  if (!dragging) return;
+  dragging = false;
+  if (Math.abs(dragDeltaX) > 60) goToCard(currentCard + (dragDeltaX < 0 ? 1 : -1));
+});
+
+window.addEventListener('resize', () => goToCard(currentCard));
+
+// ── Speaker custom cursor ──────────────────────────────────
+(function () {
+  const cursor     = document.getElementById('speaker-cursor');
+  const cursorIcon = document.getElementById('speaker-cursor-icon');
+  const speakerSection = document.getElementById('speakers');
+  const speakersGrid   = document.getElementById('speakersGrid');
+  if (!cursor || !speakerSection || !speakersGrid) return;
+
+  let mouseX = 0, mouseY = 0;
+  let rafId = null;
+  let insideSection = false;
+
+  function moveCursor() {
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top  = mouseY + 'px';
+    rafId = null;
+  }
+
+  function getCardUnderPointer(x, y) {
+    const cards = speakersGrid.querySelectorAll('.speaker-card');
+    for (const card of cards) {
+      const r = card.getBoundingClientRect();
+      if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) {
+        return +card.dataset.index;
+      }
+    }
+    return -1;
+  }
+
+  speakerSection.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    if (!rafId) rafId = requestAnimationFrame(moveCursor);
+
+    const cardIndex = getCardUnderPointer(e.clientX, e.clientY);
+    if (cardIndex === -1) {
+      cursor.classList.remove('visible');
+      speakerSection.style.cursor = '';
+    } else {
+      cursor.classList.add('visible');
+      speakerSection.style.cursor = 'none';
+      // When on card 0 (original): both cards → right arrow
+      // When on card 1 (swiped in): both cards → left arrow
+      if (currentCard === 0) {
+        cursorIcon.style.transform = 'scaleX(1)';
+      } else {
+        cursorIcon.style.transform = 'scaleX(-1)';
+      }
+    }
+  });
+
+  speakerSection.addEventListener('mouseleave', () => {
+    cursor.classList.remove('visible');
+    speakerSection.style.cursor = '';
+  });
+
+  // Clicking a card advances/retreats the carousel
+  speakersGrid.addEventListener('click', e => {
+    if (!e.target.closest('.speaker-card')) return;
+    if (Math.abs(dragDeltaX) > 8) return; // was a drag, not a click
+    goToCard(currentCard === 0 ? 1 : 0);
+  });
+})();
+</script>
+
+<script>
+/* ── Text scramble on schedule row hover ─────────────────── */
+(function () {
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&';
+  const FRAME_RATE = 40;   // ms per scramble tick
+  const RESOLVE_SPEED = 0.4; // fraction of chars that lock per tick (higher = faster reveal)
+
+  function rand(n) { return Math.floor(Math.random() * n); }
+
+  function scramble(el) {
+    const original = el.dataset.scrambleOriginal || el.textContent;
+    el.dataset.scrambleOriginal = original;
+
+    // cancel any running animation on this element
+    if (el._scrambleTimer) clearInterval(el._scrambleTimer);
+
+    const len = original.length;
+    // track how many chars have locked from left → right
+    let resolved = 0;
+
+    el._scrambleTimer = setInterval(() => {
+      resolved += len * RESOLVE_SPEED;
+      const lockedCount = Math.min(Math.floor(resolved), len);
+
+      let out = '';
+      for (let i = 0; i < len; i++) {
+        if (original[i] === ' ' || original[i] === ' ') {
+          out += original[i];
+        } else if (i < lockedCount) {
+          out += original[i];
+        } else {
+          out += CHARS[rand(CHARS.length)];
+        }
+      }
+      el.textContent = out;
+
+      if (lockedCount >= len) {
+        el.textContent = original;
+        clearInterval(el._scrambleTimer);
+        el._scrambleTimer = null;
+      }
+    }, FRAME_RATE);
+  }
+
+  function reset(el) {
+    if (el._scrambleTimer) clearInterval(el._scrambleTimer);
+    el._scrambleTimer = null;
+    if (el.dataset.scrambleOriginal) el.textContent = el.dataset.scrambleOriginal;
+  }
+
+  document.querySelectorAll('.schedule-row:not(.schedule-row--dark)').forEach(row => {
+    const text = row.querySelector('.schedule-text');
+    const tag  = row.querySelector('.schedule-tag');
+    row.addEventListener('mouseenter', () => {
+      if (text) scramble(text);
+      if (tag)  scramble(tag);
+    });
+    row.addEventListener('mouseleave', () => {
+      if (text) reset(text);
+      if (tag)  reset(tag);
+    });
+  });
+})();
+</script>
+</body>
+</html>
