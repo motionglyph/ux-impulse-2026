@@ -91,12 +91,28 @@ body {
   display: block;
   width: 100%;
   height: auto;
-  /* pull video down by 8px so its bottom edge hides under
-     the next section — eliminates the hard colour edge */
   margin-bottom: -8px;
   outline: none;
   border: none;
   vertical-align: bottom;
+}
+
+/* YouTube iframe header background */
+.header-yt-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 */
+  margin-bottom: -8px;
+  overflow: hidden;
+}
+
+.header-yt-wrap iframe {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 100%; height: 100%;
+  transform: translate(-50%, -50%);
+  border: none;
+  pointer-events: none;
 }
 
 /* remove default inline spacing gap below video */
@@ -307,6 +323,26 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+/* YouTube iframe venue */
+.venue-yt-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.venue-yt-wrap iframe {
+  position: absolute;
+  top: 50%; left: 50%;
+  /* scale up to cover the container regardless of aspect ratio */
+  width: 177.78vh; /* 16/9 * 100vh */
+  height: 56.25vw; /* 9/16 * 100vw */
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  border: none;
+  pointer-events: none;
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -676,9 +712,9 @@ body {
 
 <!-- ═══════ HEADER — full-viewport video backdrop ═══════ -->
 <section id="header">
-  <video class="header-video-bg" autoplay muted playsinline id="headerVideo"
-    src="chosen-2.mp4">
-  </video>
+  <div class="header-yt-wrap">
+    <iframe src="https://www.youtube.com/embed/kpegGbzOAZ0?autoplay=1&mute=1&loop=1&playlist=kpegGbzOAZ0&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
   <div class="header-scrim"></div>
   <div class="header-text">
     <h1 class="header-title" id="headerTitle">UX IMPULSE</h1>
@@ -745,9 +781,9 @@ body {
 <div id="venue-scroll">
   <div id="venue-sticky">
     <div class="venue-mask" id="venueMask">
-      <video class="venue-video" autoplay muted loop playsinline
-        src="PVM-official.mp4">
-      </video>
+      <div class="venue-yt-wrap">
+        <iframe src="https://www.youtube.com/embed/nkqdLoehFYo?autoplay=1&mute=1&loop=1&playlist=nkqdLoehFYo&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>
     </div>
     <div class="venue-label" id="venueLabel">
       <p class="venue-label-title">Venue</p>
@@ -837,20 +873,6 @@ const $  = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
-// ── Header video: play once, hold last frame ───────────────
-const headerVideo = $('#headerVideo');
-if (headerVideo) {
-  headerVideo.loop = false;
-  headerVideo.addEventListener('ended', () => {
-    headerVideo.pause();
-  });
-  // Fallback: poll to catch edge cases where 'ended' doesn't fire
-  headerVideo.addEventListener('timeupdate', () => {
-    if (headerVideo.duration && headerVideo.currentTime >= headerVideo.duration - 0.05) {
-      headerVideo.pause();
-    }
-  });
-}
 (function () {
   const event = new Date('2026-10-15');
   const diff = Math.ceil((event - Date.now()) / 86400000);
