@@ -6,6 +6,7 @@
 <title>UX Impulse MTL 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://player.vimeo.com/api/player.js"></script>
 <style>
 
 /* ── Reset ──────────────────────────────────────────────── */
@@ -101,7 +102,7 @@ body {
 .header-yt-wrap {
   position: relative;
   width: 100%;
-  padding-top: 56.25%; /* 16:9 */
+  padding-top: 59.18%;
   margin-bottom: -8px;
   overflow: hidden;
 }
@@ -712,9 +713,9 @@ body {
 
 <!-- ═══════ HEADER — full-viewport video backdrop ═══════ -->
 <section id="header">
-  <video class="header-video-bg" autoplay muted playsinline id="headerVideo"
-    src="chosen-2.mp4">
-  </video>
+  <div class="header-yt-wrap">
+    <iframe id="headerVideo" src="https://player.vimeo.com/video/1216424163?badge=0&autopause=0&autoplay=1&muted=1&controls=0&loop=0&app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+  </div>
   <div class="header-scrim"></div>
   <div class="header-text">
     <h1 class="header-title" id="headerTitle">UX IMPULSE</h1>
@@ -781,9 +782,9 @@ body {
 <div id="venue-scroll">
   <div id="venue-sticky">
     <div class="venue-mask" id="venueMask">
-      <video class="venue-video" autoplay muted loop playsinline
-        src="PVM-official.mp4">
-      </video>
+      <div class="venue-yt-wrap">
+        <iframe id="venueVideo" src="https://player.vimeo.com/video/1216424162?badge=0&autopause=0&autoplay=1&muted=1&controls=0&loop=1&app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      </div>
     </div>
     <div class="venue-label" id="venueLabel">
       <p class="venue-label-title">Venue</p>
@@ -873,17 +874,9 @@ const $  = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
-// ── Header video: play once, hold last frame ───────────────
-const headerVideo = $('#headerVideo');
-if (headerVideo) {
-  headerVideo.loop = false;
-  headerVideo.addEventListener('ended', () => { headerVideo.pause(); });
-  headerVideo.addEventListener('timeupdate', () => {
-    if (headerVideo.duration && headerVideo.currentTime >= headerVideo.duration - 0.05) {
-      headerVideo.pause();
-    }
-  });
-}
+// ── Header video: play once via Vimeo API, pause on end ────
+const headerVimeo = new Vimeo.Player('headerVideo');
+headerVimeo.on('ended', () => headerVimeo.pause());
 (function () {
   const event = new Date('2026-10-15');
   const diff = Math.ceil((event - Date.now()) / 86400000);
