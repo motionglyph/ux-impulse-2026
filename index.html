@@ -712,9 +712,9 @@ body {
 
 <!-- ═══════ HEADER — full-viewport video backdrop ═══════ -->
 <section id="header">
-  <div class="header-yt-wrap">
-    <iframe src="https://www.youtube.com/embed/kpegGbzOAZ0?autoplay=1&mute=1&loop=1&playlist=kpegGbzOAZ0&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-  </div>
+  <video class="header-video-bg" autoplay muted playsinline id="headerVideo"
+    src="chosen-2.mp4">
+  </video>
   <div class="header-scrim"></div>
   <div class="header-text">
     <h1 class="header-title" id="headerTitle">UX IMPULSE</h1>
@@ -781,9 +781,9 @@ body {
 <div id="venue-scroll">
   <div id="venue-sticky">
     <div class="venue-mask" id="venueMask">
-      <div class="venue-yt-wrap">
-        <iframe src="https://www.youtube.com/embed/nkqdLoehFYo?autoplay=1&mute=1&loop=1&playlist=nkqdLoehFYo&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-      </div>
+      <video class="venue-video" autoplay muted loop playsinline
+        src="PVM-official.mp4">
+      </video>
     </div>
     <div class="venue-label" id="venueLabel">
       <p class="venue-label-title">Venue</p>
@@ -873,6 +873,17 @@ const $  = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
+// ── Header video: play once, hold last frame ───────────────
+const headerVideo = $('#headerVideo');
+if (headerVideo) {
+  headerVideo.loop = false;
+  headerVideo.addEventListener('ended', () => { headerVideo.pause(); });
+  headerVideo.addEventListener('timeupdate', () => {
+    if (headerVideo.duration && headerVideo.currentTime >= headerVideo.duration - 0.05) {
+      headerVideo.pause();
+    }
+  });
+}
 (function () {
   const event = new Date('2026-10-15');
   const diff = Math.ceil((event - Date.now()) / 86400000);
