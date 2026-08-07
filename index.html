@@ -877,10 +877,11 @@ const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 // ── Header video: play once via Vimeo API, pause on end ────
 const headerVimeo = new Vimeo.Player('headerVideo');
 headerVimeo.getDuration().then(duration => {
+  const stopAt = duration - 0.5;
   headerVimeo.on('timeupdate', ({ seconds }) => {
-    if (seconds >= duration - 0.1) {
+    if (seconds >= stopAt) {
       headerVimeo.off('timeupdate');
-      headerVimeo.setCurrentTime(duration - 0.1).then(() => headerVimeo.pause());
+      headerVimeo.pause().then(() => headerVimeo.setCurrentTime(stopAt));
     }
   });
 });
