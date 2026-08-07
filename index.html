@@ -876,7 +876,14 @@ const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
 // ── Header video: play once via Vimeo API, pause on end ────
 const headerVimeo = new Vimeo.Player('headerVideo');
-headerVimeo.on('ended', () => headerVimeo.pause());
+headerVimeo.getDuration().then(duration => {
+  headerVimeo.on('timeupdate', ({ seconds }) => {
+    if (seconds >= duration - 0.1) {
+      headerVimeo.off('timeupdate');
+      headerVimeo.setCurrentTime(duration - 0.1).then(() => headerVimeo.pause());
+    }
+  });
+});
 (function () {
   const event = new Date('2026-10-15');
   const diff = Math.ceil((event - Date.now()) / 86400000);
