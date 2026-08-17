@@ -1,0 +1,21 @@
+{
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "routes": [
+    { "src": "/", "dest": "/canvas.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600" }
+      ]
+    },
+    {
+      "source": "/(.*\\.webm|.*\\.mp4|.*\\.mov)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    }
+  ]
+}
