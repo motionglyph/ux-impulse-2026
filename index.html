@@ -10,10 +10,25 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    /* ─────────────── TYPE SCALE ─────────────── */
+    /* One size per role. Headings scale fluidly between phone and desktop. */
+    :root {
+      --fs-display: clamp(48px, 9vw, 72px);   /* H1: event name */
+      --fs-h2:      clamp(32px, 5.5vw, 48px); /* section titles, hero tagline */
+      --fs-h3:      clamp(24px, 3vw, 28px);   /* card titles, subtitles */
+      --fs-h4:      18px;                     /* small titles, FAQ questions, key facts */
+      --fs-body:    16px;                     /* paragraphs */
+      --fs-small:   14px;                     /* tables, meta, secondary info */
+      --fs-label:   12px;                     /* uppercase eyebrows */
+      --lh-heading: 1.1;
+      --lh-body:    1.6;
+    }
+
     /* Purple left → hot pink right. Painted once across the full page (no tiling),
        so it always bleeds edge to edge and never restarts as a dark purple strip */
     html {
       min-height: 100%;
+      overflow-x: clip; /* on html too: iOS Safari ignores it on body alone */
       background: #C030E0 linear-gradient(to right, #8B1EC8 0%, #C030E0 50%, #E060F0 80%, #F080FF 100%) no-repeat;
       background-size: 100% 100%;
     }
@@ -42,7 +57,7 @@
     }
 
     .hero-title {
-      font-size: 72px;
+      font-size: var(--fs-display);
       font-weight: 800;
       line-height: 1;
       letter-spacing: -2px;
@@ -51,7 +66,7 @@
     }
 
     .hero-subtitle {
-      font-size: 26px;
+      font-size: var(--fs-h3);
       font-weight: 400;
       opacity: 0.95;
     }
@@ -74,15 +89,15 @@
     }
 
     .hero-info-card h3 {
-      font-size: 17px;
+      font-size: var(--fs-h4);
       font-weight: 700;
       margin-bottom: 12px;
       color: #111;
     }
 
     .hero-info-card p {
-      font-size: 13px;
-      line-height: 1.65;
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
       color: #333;
       margin-bottom: 10px;
     }
@@ -96,9 +111,9 @@
     }
 
     .hero-tagline-big {
-      font-size: 54px;
+      font-size: var(--fs-h2);
       font-weight: 800;
-      line-height: 1.1;
+      line-height: var(--lh-heading);
       letter-spacing: -0.5px;
       margin-bottom: 22px;
     }
@@ -111,7 +126,7 @@
     }
 
     .hero-tagline-sub {
-      font-size: 26px;
+      font-size: var(--fs-h3);
       font-weight: 700;
     }
 
@@ -152,8 +167,8 @@
     .info-card {
       border-radius: 4px;
       padding: 44px 36px;
-      font-size: 15px;
-      line-height: 1.5;
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -163,7 +178,7 @@
 
     /* Hierarchy: eyebrow → heading → key facts → body → action */
     .info-eyebrow {
-      font-size: 11px;
+      font-size: var(--fs-label);
       font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -172,9 +187,9 @@
     }
 
     .info-card h2 {
-      font-size: 30px;
+      font-size: var(--fs-h3);
       font-weight: 800;
-      line-height: 1.15;
+      line-height: var(--lh-heading);
       letter-spacing: -0.5px;
     }
 
@@ -201,7 +216,7 @@
     }
 
     .info-fact-label {
-      font-size: 11px;
+      font-size: var(--fs-label);
       font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -210,7 +225,7 @@
     }
 
     .info-fact-value {
-      font-size: 17px;
+      font-size: var(--fs-h4);
       font-weight: 700;
       line-height: 1.3;
     }
@@ -251,7 +266,7 @@
     }
 
     .countdown-unit .lbl {
-      font-size: 11px;
+      font-size: var(--fs-label);
       font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -260,7 +275,7 @@
     }
 
     .countdown-location {
-      font-size: 14px;
+      font-size: var(--fs-small);
       font-weight: 600;
       background: rgba(255,255,255,0.45);
       border-radius: 999px;
@@ -281,10 +296,11 @@
     }
 
     .agenda-section h2 {
-      font-size: 72px;
+      font-size: var(--fs-h2);
       font-weight: 600;
       margin-bottom: 28px;
       margin-top: 4px;
+      line-height: var(--lh-heading);
     }
 
     /* Wide table scrolls inside its own box on small screens instead of the page */
@@ -307,14 +323,14 @@
       color: white;
       padding: 13px 16px;
       text-align: left;
-      font-size: 13.5px;
+      font-size: var(--fs-small);
       font-weight: 600;
       border: 1px solid #C855E5;
     }
 
     .agenda-table td {
       padding: 11px 16px;
-      font-size: 13.5px;
+      font-size: var(--fs-small);
       vertical-align: top;
       border: 1px solid #C855E5;
       line-height: 1.5;
@@ -369,14 +385,14 @@
     .speaker-info {
       padding: 32px 20px 34px;
       text-align: center;
-      font-size: 15px;
+      font-size: var(--fs-small);
       line-height: 1.4;
     }
 
     .speaker-info .s-time  { color: #333; margin-bottom: 2px; }
-    .speaker-info .s-name  { font-size: 16px; font-weight: 700; color: #111; margin-bottom: 10px; }
+    .speaker-info .s-name  { font-size: var(--fs-body); font-weight: 700; color: #111; margin-bottom: 10px; }
     .speaker-info .s-role  { color: #333; margin-bottom: 10px; }
-    .speaker-info .s-talk  { font-size: 16px; font-weight: 600; color: #111; }
+    .speaker-info .s-talk  { font-size: var(--fs-body); font-weight: 600; color: #111; }
     .speaker-info .s-talk em { font-style: italic; }
     .speaker-info .s-talk .s-note { font-weight: 400; }
 
@@ -386,23 +402,24 @@
     }
 
     .faq-section h2 {
-      font-size: 72px;
+      font-size: var(--fs-h2);
       font-weight: 600;
       margin-bottom: 32px;
       margin-top: 4px;
+      line-height: var(--lh-heading);
     }
 
     .faq-item { margin-bottom: 22px; }
 
     .faq-q {
-      font-size: 14.5px;
+      font-size: var(--fs-h4);
       font-weight: 700;
       margin-bottom: 5px;
     }
 
     .faq-a {
-      font-size: 14.5px;
-      line-height: 1.7;
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
       opacity: 0.95;
     }
 
@@ -412,15 +429,16 @@
     }
 
     .team-section h2 {
-      font-size: 72px;
+      font-size: var(--fs-h2);
       font-weight: 600;
       margin-bottom: 32px;
       margin-top: 4px;
+      line-height: var(--lh-heading);
     }
 
     .team-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 28px 28px;
     }
 
@@ -447,16 +465,16 @@
       display: block;
     }
 
-    .t-name { font-size: 15px; font-weight: 600; }
-    .t-dept { font-size: 13px; opacity: 0.75; margin-top: 2px; }
+    .team-member > div:last-child { min-width: 0; overflow-wrap: anywhere; }
+
+    .t-name { font-size: var(--fs-body); font-weight: 600; }
+    .t-dept { font-size: var(--fs-small); opacity: 0.75; margin-top: 2px; }
 
     /* ─────────────── RESPONSIVE ─────────────── */
     @media (max-width: 960px) {
       .hero               { padding: 48px 24px; }
       .hero-inner         { grid-template-columns: 1fr; row-gap: 32px; }
-      .hero-title         { font-size: 56px; }
       .hero-logo          { width: 200px; margin-left: -34px; }
-      .hero-tagline-big   { font-size: 40px; }
       .hero-right         { padding-top: 0; }
       .info-section,
       .agenda-section,
@@ -469,7 +487,11 @@
       .info-icon-clock    { order: 3; margin-top: 16px; }
       .card-teal          { order: 4; }
       .speakers-grid      { grid-template-columns: 1fr 1fr; column-gap: 20px; row-gap: 28px; }
-      .team-grid          { grid-template-columns: repeat(2,1fr); }
+      .team-grid          { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 600px) {
+      .team-grid          { grid-template-columns: 1fr; row-gap: 20px; }
     }
   </style>
 </head>
