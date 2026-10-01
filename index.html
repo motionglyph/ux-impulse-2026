@@ -24,13 +24,28 @@
       --lh-body:    1.6;
     }
 
-    /* Purple left → hot pink right. Painted once across the full page (no tiling),
-       so it always bleeds edge to edge and never restarts as a dark purple strip */
+    /* Purple left → hot pink right. The gradient only runs horizontally, so it
+       repeats seamlessly downward and fills the page edge to edge at any length */
+    :root {
+      --page-gradient: linear-gradient(to right, #8B1EC8 0%, #C030E0 50%, #E060F0 80%, #F080FF 100%);
+    }
+
     html {
       min-height: 100%;
       overflow-x: clip; /* on html too: iOS Safari ignores it on body alone */
-      background: #C030E0 linear-gradient(to right, #8B1EC8 0%, #C030E0 50%, #E060F0 80%, #F080FF 100%) no-repeat;
+      background: #C030E0 var(--page-gradient) repeat-y;
       background-size: 100% 100%;
+    }
+
+    /* Screen-fixed copy that reaches far past the top and bottom, so the
+       iOS rubber-band area when over-scrolling shows the gradient, not a flat band */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -100vh 0;
+      z-index: -1;
+      background: var(--page-gradient);
+      pointer-events: none;
     }
 
     body {
