@@ -10,12 +10,19 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    /* Purple left → hot pink right. Painted once across the full page (no tiling),
+       so it always bleeds edge to edge and never restarts as a dark purple strip */
+    html {
+      min-height: 100%;
+      background: #C030E0 linear-gradient(to right, #8B1EC8 0%, #C030E0 50%, #E060F0 80%, #F080FF 100%) no-repeat;
+      background-size: 100% 100%;
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      /* Purple top-left → hot pink bottom-right, matches screenshots exactly */
-      background: linear-gradient(to right, #8B1EC8 0%, #C030E0 50%, #E060F0 80%, #F080FF 100%);
       min-height: 100vh;
       color: white;
+      overflow-x: clip; /* nothing may widen the page past the viewport */
     }
 
     /* ─────────────── HERO ─────────────── */
@@ -280,8 +287,16 @@
       margin-top: 4px;
     }
 
+    /* Wide table scrolls inside its own box on small screens instead of the page */
+    .agenda-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 10px;
+    }
+
     .agenda-table {
       width: 100%;
+      min-width: 720px;
       border-collapse: collapse;
       border-radius: 10px;
       overflow: hidden;
@@ -543,6 +558,7 @@
 
   <h2>Agenda: Get ready to feel the spark</h2>
 
+  <div class="agenda-scroll">
   <table class="agenda-table">
     <thead>
       <tr>
@@ -636,6 +652,7 @@
       </tr>
     </tbody>
   </table>
+  </div>
 </div>
 
 <!-- ══════════════ SPEAKERS ══════════════ -->
